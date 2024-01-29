@@ -56,7 +56,7 @@ You could adapt the benchmarks to your use cases. If you don't know whether you 
 | string | HashMap        | 128  | 156 250          |                  |
 | string | **HybridMap**  | 128  | 156 600          | x1.0             |
 
-After `16` entries, HybridMap switches to a HashMap internally. This benchmark is not a very robust benchmark. Benchmarking HybridMap correctly is hard and requires more effort than implementing the crate. As the license says, use at your own risk.
+In this benchmark, the HybridMap switches to a HashMap internally once it has more than `16` entries. This benchmark is not a very robust benchmark. Benchmarking HybridMap correctly is hard and requires more effort than implementing the crate. As the license says, use at your own risk.
 
 ```bash
 # Run the benchmarks
@@ -75,7 +75,7 @@ xdg-open target/criterion/report/index.html
 
 HybridMap has a small memory overhead, the enum variant between the vector and the hashmap and a vector pre-allocated on the stack.
 
-The default vector size on the stack is 8 entries. You may save a tiny bit of memory by adapting the vector size to the number of entries you expect to store in the maps. But a large vector will very quickly be a waste of resources. Consider staying below 20.
+The default vector size on the stack is `8` entries. You may save a tiny bit of memory by adapting the vector size to the number of entries you expect to store in the maps. But a large vector will very quickly be a waste of resources. Consider staying below `20`.
 
 For maps containing very few entries, one or two, memory usage can be one order of magnitude smaller than a hashmap. Otherwise, the memory usage is similar to a normal hashmap.
 
