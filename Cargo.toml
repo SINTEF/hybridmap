@@ -1,0 +1,37 @@
+[package]
+name = "hybridmap"
+version = "0.1.0"
+edition = "2021"
+description = "Hybrid map using smallvec and the std hashmap"
+license = "Apache-2.0"
+keywords = ["map", "small", "hashmap", "smallvec", "hybrid"]
+documentation = "https://docs.rs/hybridmap"
+authors = ["Antoine Pultier <antoine.pultier@sintef.no>"]
+repository = "https://github.com/SINTEF/hybridmap"
+include = [
+  "README.md",
+  "LICENSE",
+  "src/*.rs",
+  "benches/*.rs",
+  "Cargo.toml",
+  "Cargo.lock",
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8.5"
+smallvec = "2.0.0-alpha.3"
+
+[dev-dependencies]
+criterion = "0.5"
+uuid = "1.7"
+sys-info = "0.9"
+
+[[bench]]
+name = "hybridmap_bench"
+harness = false
+
+[[bench]]
+name = "hybridmap_memory"
+harness = false
