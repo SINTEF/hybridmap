@@ -30,7 +30,6 @@ You could adapt the benchmarks to your use cases. If you know whether you should
 *Results on a Macbook Pro M1:*
 
 | Type   | Map            | Size | Median Time (ns) | Performance Gain |
-|--------|----------------|------|------------------|------------------|
 | i64    | HashMap        | 1    | 244              |                  |
 | i64    | **HybridMap**  | 1    | 188              | x1.29            |
 | i64    | HashMap        | 4    | 1 107            |                  |
@@ -39,7 +38,6 @@ You could adapt the benchmarks to your use cases. If you know whether you should
 | i64    | **HybridMap**  | 16   | 3 233            | x1.41            |
 | i64    | HashMap        | 128  | 36 633           |                  |
 | i64    | **HybridMap**  | 128  | 36 695           | x1.0             |
-|--------|----------------|------|------------------|------------------|
 | uuid   | HashMap        | 1    | 347              |                  |
 | uuid   | **HybridMap**  | 1    | 235              | x1.48            |
 | uuid   | HashMap        | 4    | 1 604            |                  |
@@ -48,7 +46,6 @@ You could adapt the benchmarks to your use cases. If you know whether you should
 | uuid   | **HybridMap**  | 16   | 6 448            | x0.98            |
 | uuid   | HashMap        | 128  | 47 510           |                  |
 | uuid   | **HybridMap**  | 128  | 49 862           | x0.95            |
-|--------|----------------|------|------------------|------------------|
 | string | HashMap        | 1    | 1 189            |                  |
 | string | **HybridMap**  | 1    | 1 108            | x1.07            |
 | string | HashMap        | 4    | 5 292            |                  |
@@ -65,7 +62,7 @@ After `16` entries, HybridMap switches to a HashMap internally. This benchmark i
 cargo bench --bench=hybridmap_bench -- --quick --quiet
 
 # Run this command instead if you have more patience
-cargo bench
+cargo bench --bench=hybridmap_bench
 
 # Open the results in a browser
 open target/criterion/report/index.html
