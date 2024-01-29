@@ -25,7 +25,7 @@ assert_eq!(map.len(), 2);
 
 The benchmark is unlikely to be representative of your use cases. You might see some of the gains shown below if you create many short-lived small maps. You may also get worse performances than a standard hash map.
 
-You could adapt the benchmarks to your use cases. If you know whether you should use this hybrid map or a hashmap, you should go with a hashmap. As the numbers show, the performance gain is not that great.
+You could adapt the benchmarks to your use cases. If you don't know whether you should use this hybrid map or a hashmap, you should go with a hashmap. As the numbers show, the performance gain is not that great.
 
 *Results on a Macbook Pro M1:*
 
