@@ -30,6 +30,7 @@ You could adapt the benchmarks to your use cases. If you know whether you should
 *Results on a Macbook Pro M1:*
 
 | Type   | Map            | Size | Median Time (ns) | Performance Gain |
+| ------ | -------------- | ---- | ---------------- | ---------------- |
 | i64    | HashMap        | 1    | 244              |                  |
 | i64    | **HybridMap**  | 1    | 188              | x1.29            |
 | i64    | HashMap        | 4    | 1 107            |                  |
@@ -89,7 +90,7 @@ cargo bench --bench=hybridmap_memory
 
 ## Why ?
 
-I started benchmarking tiny maps to check whether I should switch from HashMap to BTreeMap for my use case. I also had a naive Vec implementation that was surprisingly faster for my use case. Thus, I made this crate for fun.
+I started benchmarking tiny maps to check whether I should switch from HashMap to BTreeMap for my use case. I also had a naive Vec implementation that was surprisingly faster. Thus, I made this crate for fun.
 
 The energy savings this crate may bring probably do not compensate for the energy I used to boil water for my tea while implementing this crate. But it was fun.
 
