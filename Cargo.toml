@@ -1,6 +1,6 @@
 [package]
 name = "hybridmap"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Hybrid map using smallvec and the std hashmap"
 license = "Apache-2.0"

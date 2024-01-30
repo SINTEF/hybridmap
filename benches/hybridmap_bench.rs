@@ -16,13 +16,13 @@ fn random_string(mut rng: impl rand::RngCore, len: usize) -> String {
 }
 
 fn hybridmap_bench(c: &mut Criterion) {
-    let mut group = c.benchmark_group("i64");
     let mut rng = rand::thread_rng();
 
+    let mut group = c.benchmark_group("i64");
     for size in [1, 4, 16, 128].iter() {
         group.bench_function(format!("HybridMap {}", size), |b| {
             b.iter(|| {
-                let mut map = HybridMap::<i64, i64, 8>::new();
+                let mut map = HybridMap::<i64, i64, 16>::new();
 
                 let mut sum = 0_i64;
                 for _i in 0..criterion::black_box(*size * 2) {
@@ -55,7 +55,7 @@ fn hybridmap_bench(c: &mut Criterion) {
     for size in [1, 4, 16, 128].iter() {
         group.bench_function(format!("HybridMap {}", size), |b| {
             b.iter(|| {
-                let mut map = HybridMap::<Uuid, i64>::new();
+                let mut map = HybridMap::<Uuid, i64, 16>::new();
                 let mut uuids_pool: Vec<Uuid> = Vec::new();
 
                 let mut sum = 0_i64;
@@ -166,6 +166,65 @@ fn hybridmap_bench(c: &mut Criterion) {
             })
         });
     }
+
+    group.finish();
+
+    let mut group = c.benchmark_group("init");
+
+    group.bench_function("HybridMap<1> 1", |b| {
+        b.iter(|| {
+            let mut map = HybridMap::<Uuid, i64, 1>::new();
+            map.insert(fast_random_uuid(&mut rng), 1);
+            let collected_vec: Vec<_> = map.iter().collect();
+            assert_eq!(collected_vec.len(), 1);
+        })
+    });
+    group.bench_function("HybridMap<1> 2", |b| {
+        b.iter(|| {
+            let mut map = HybridMap::<Uuid, i64, 1>::new();
+            map.insert(fast_random_uuid(&mut rng), 1);
+            map.insert(fast_random_uuid(&mut rng), 2);
+            let collected_vec: Vec<_> = map.iter().collect();
+            assert_eq!(collected_vec.len(), 2);
+        })
+    });
+
+    group.bench_function("HybridMap<4> 1", |b| {
+        b.iter(|| {
+            let mut map = HybridMap::<Uuid, i64, 4>::new();
+            map.insert(fast_random_uuid(&mut rng), 1);
+            let collected_vec: Vec<_> = map.iter().collect();
+            assert_eq!(collected_vec.len(), 1);
+        })
+    });
+
+    group.bench_function("HybridMap<4> 2", |b| {
+        b.iter(|| {
+            let mut map = HybridMap::<Uuid, i64, 4>::new();
+            map.insert(fast_random_uuid(&mut rng), 1);
+            map.insert(fast_random_uuid(&mut rng), 2);
+            let collected_vec: Vec<_> = map.iter().collect();
+            assert_eq!(collected_vec.len(), 2);
+        })
+    });
+
+    group.bench_function("HashMap 1", |b| {
+        b.iter(|| {
+            let mut map = HashMap::<Uuid, i64>::new();
+            map.insert(fast_random_uuid(&mut rng), 1);
+            let collected_vec: Vec<_> = map.iter().collect();
+            assert_eq!(collected_vec.len(), 1);
+        })
+    });
+    group.bench_function("HashMap 2", |b| {
+        b.iter(|| {
+            let mut map = HashMap::<Uuid, i64>::new();
+            map.insert(fast_random_uuid(&mut rng), 1);
+            map.insert(fast_random_uuid(&mut rng), 2);
+            let collected_vec: Vec<_> = map.iter().collect();
+            assert_eq!(collected_vec.len(), 2);
+        })
+    });
 
     group.finish();
 }
