@@ -1,6 +1,6 @@
 [package]
 name = "hybridmap"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Hybrid map using smallvec and the std hashmap"
 license = "Apache-2.0"
@@ -21,11 +21,11 @@ include = [
 
 [dependencies]
 rand = "0.8.5"
-smallvec = "2.0.0-alpha.3"
+smallvec = "2.0.0-alpha.7"
 
 [dev-dependencies]
 criterion = "0.5"
-uuid = "1.7"
+uuid = "1.10"
 sys-info = "0.9"
 
 [[bench]]
