@@ -25,36 +25,36 @@ assert_eq!(map.len(), 2);
 
 The benchmark is unlikely to be representative of your use cases. You might see some of the gains shown below if you create many short-lived small maps. You may also get worse performances than a standard hash map.
 
-You could adapt the benchmarks to your use cases. If you don't know whether you should use this hybrid map or a hashmap, you should go with a hashmap. As the numbers show, the performance gain is not that great.
+You could adapt the benchmarks to your use cases. If you don't know whether you should use this hybrid map or a hashmap, you should go with a hashmap. As the numbers show, HybridMap can be much faster for tiny maps, but the gain quickly shrinks as the map grows.
 
-*Results on a Macbook Pro M1:*
+*Results using a MacBook Pro M1 with Rust 1.94.0:*
 
 | Type   | Map            | Size | Median Time (ns) | Performance Gain |
 |--------|----------------|------|------------------|------------------|
-| i64    | HashMap        | 1    | 248              |                  |
-| i64    | **HybridMap**  | 1    | 194              | x1.28            |
-| i64    | HashMap        | 4    | 1 117            |                  |
-| i64    | **HybridMap**  | 4    | 822              | x1.36            |
-| i64    | HashMap        | 16   | 4 581            |                  |
-| i64    | **HybridMap**  | 16   | 3 241            | x1.41            |
-| i64    | HashMap        | 128  | 36 593           |                  |
-| i64    | **HybridMap**  | 128  | 36 629           | x1.0             |
-| uuid   | HashMap        | 1    | 335              |                  |
-| uuid   | **HybridMap**  | 1    | 235              | x1.43            |
-| uuid   | HashMap        | 4    | 1 610            |                  |
-| uuid   | **HybridMap**  | 4    | 941              | x1.71            |
-| uuid   | HashMap        | 16   | 6 346            |                  |
-| uuid   | **HybridMap**  | 16   | 6 424            | x0.99            |
-| uuid   | HashMap        | 128  | 49 799           |                  |
-| uuid   | **HybridMap**  | 128  | 49 841           | x1.0             |
-| string | HashMap        | 1    | 1 176            |                  |
-| string | **HybridMap**  | 1    | 1 113            | x1.06            |
-| string | HashMap        | 4    | 5 313            |                  |
-| string | **HybridMap**  | 4    | 4 695            | x1.13            |
-| string | HashMap        | 16   | 21 626           |                  |
-| string | **HybridMap**  | 16   | 21 009           | x1.03            |
-| string | HashMap        | 128  | 156 010          |                  |
-| string | **HybridMap**  | 128  | 156 880          | x0.99            |
+| i64    | HashMap        | 1    | 129              |                  |
+| i64    | **HybridMap**  | 1    | 32               | x4.03            |
+| i64    | HashMap        | 4    | 581              |                  |
+| i64    | **HybridMap**  | 4    | 188              | x3.09            |
+| i64    | HashMap        | 16   | 2 497            |                  |
+| i64    | **HybridMap**  | 16   | 820              | x3.05            |
+| i64    | HashMap        | 128  | 20 323           |                  |
+| i64    | **HybridMap**  | 128  | 19 039           | x1.07            |
+| uuid   | HashMap        | 1    | 189              |                  |
+| uuid   | **HybridMap**  | 1    | 126              | x1.50            |
+| uuid   | HashMap        | 4    | 841              |                  |
+| uuid   | **HybridMap**  | 4    | 432              | x1.95            |
+| uuid   | HashMap        | 16   | 3 541            |                  |
+| uuid   | **HybridMap**  | 16   | 3 458            | x1.02            |
+| uuid   | HashMap        | 128  | 27 422           |                  |
+| uuid   | **HybridMap**  | 128  | 28 876           | x0.95            |
+| string | HashMap        | 1    | 804              |                  |
+| string | **HybridMap**  | 1    | 792              | x1.02            |
+| string | HashMap        | 4    | 3 561            |                  |
+| string | **HybridMap**  | 4    | 3 162            | x1.13            |
+| string | HashMap        | 16   | 15 863           |                  |
+| string | **HybridMap**  | 16   | 15 754           | x1.01            |
+| string | HashMap        | 128  | 115 980          |                  |
+| string | **HybridMap**  | 128  | 113 190          | x1.02            |
 
 In this benchmark, the HybridMap switches to a HashMap internally once it has more than `16` entries. This benchmark is not a very robust benchmark. Benchmarking HybridMap correctly is hard and requires more effort than implementing the crate. As the license says, use at your own risk.
 
@@ -62,12 +62,12 @@ In this benchmark, the HybridMap switches to a HashMap internally once it has mo
 
 | Type                  | Len     | Median Time (ns) | Performance Gain |
 |-----------------------|---------|------------------|------------------|
-| HashMap<Uuid,i64>     | 1       | 130              |                  |
-| HashMap<Uuid,i64>     | 2       | 173              |                  |
-| HybridMap<Uuid,i64,1> | 1       | 50               | x2.61            |
-| HybridMap<Uuid,i64,1> | 2       | 174              | x0.99            |
-| HybridMap<Uuid,i64,4> | 1       | 53               | x2.45            |
-| HybridMap<Uuid,i64,4> | 2       | 80               | x2.17            |
+| HashMap<Uuid,i64>     | 1       | 190              |                  |
+| HashMap<Uuid,i64>     | 2       | 405              |                  |
+| HybridMap<Uuid,i64,1> | 1       | 68               | x2.79            |
+| HybridMap<Uuid,i64,1> | 2       | 183              | x2.21            |
+| HybridMap<Uuid,i64,4> | 1       | 63               | x3.02            |
+| HybridMap<Uuid,i64,4> | 2       | 99               | x4.09            |
 
 
 ```bash
@@ -89,7 +89,14 @@ HybridMap has a small memory overhead, the enum variant between the vector and t
 
 The default vector size on the stack is `8` entries. You may save a tiny bit of memory by adapting the vector size to the number of entries you expect to store in the maps. But a large vector will very quickly be a waste of resources. Consider staying below `20`.
 
-For maps containing very few entries, one or two, memory usage can be one order of magnitude smaller than a hashmap. Otherwise, the memory usage is similar to a normal hashmap.
+For maps containing very few entries, HybridMap can use a bit less memory than a standard HashMap. Otherwise, the memory usage is similar to a normal hashmap.
+
+*Results from one local run of `benches/hybridmap_memory.rs` (`HybridMap<Uuid, i64, 4>` with 2 entries):*
+
+| Structure | Reported memory delta | Stack size |
+|-----------|-----------------------|------------|
+| HashMap   | 12 672                | 48 bytes   |
+| HybridMap | 8 544                 | 112 bytes  |
 
 You can adapt the `benches/hybridmap_memory.rs` file to your use case.
 
@@ -112,5 +119,5 @@ This project is licensed under the Apache License, Version 2.0 - see the [LICENS
 
 ## Acknowledgements
 
- * Inspired by [robjtede/tinymap/](https://github.com/robjtede/tinymap/).
+ * Inspired by [robjtede/tinymap](https://github.com/robjtede/tinymap/).
  * Use [smallvec](https://github.com/servo/rust-smallvec).

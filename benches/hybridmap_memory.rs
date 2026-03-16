@@ -1,11 +1,12 @@
 use std::mem;
 
 use hybridmap::HybridMap;
+use rand::{Rng, RngExt};
 use uuid::Uuid;
 
-fn fast_random_uuid(mut rng: impl rand::RngCore) -> Uuid {
+fn fast_random_uuid(rng: &mut impl Rng) -> Uuid {
     let mut bytes = [0u8; 16];
-    rng.fill_bytes(&mut bytes);
+    rng.fill(&mut bytes);
     Uuid::from_bytes(bytes)
 }
 
@@ -13,14 +14,14 @@ fn take_sample<const N: usize>(nb_samples: usize) -> (u64, u64) {
     // Get initial memory usage
     let mem_before = sys_info::mem_info().unwrap().free;
 
-    let rng = rand::thread_rng();
+    let mut rng = rand::rng();
 
     // Create a vector to hold the instances of HybridMap
     let mut vec = Vec::with_capacity(100000);
     for _ in 0..100000 {
         let mut map = HybridMap::<Uuid, i64, N>::new();
         for i in 0..nb_samples {
-            map.insert(fast_random_uuid(rng.clone()), i as i64);
+            map.insert(fast_random_uuid(&mut rng), i as i64);
         }
         vec.push(map);
     }
@@ -35,7 +36,7 @@ fn take_sample<const N: usize>(nb_samples: usize) -> (u64, u64) {
     for _ in 0..100000 {
         let mut map = std::collections::HashMap::<Uuid, i64>::new();
         for i in 0..nb_samples {
-            map.insert(fast_random_uuid(rng.clone()), i as i64);
+            map.insert(fast_random_uuid(&mut rng), i as i64);
         }
         vec.push(map);
     }

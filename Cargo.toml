@@ -1,6 +1,6 @@
 [package]
 name = "hybridmap"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 description = "Hybrid map using smallvec and the std hashmap"
 license = "Apache-2.0"
@@ -20,13 +20,13 @@ include = [
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.5"
-smallvec = "2.0.0-alpha.7"
+smallvec = "2.0.0-alpha.12"
 
 [dev-dependencies]
-criterion = "0.5"
-uuid = "1.10"
+criterion = "0.8"
+rand = "0.10"
 sys-info = "0.9"
+uuid = "1.22"
 
 [[bench]]
 name = "hybridmap_bench"
